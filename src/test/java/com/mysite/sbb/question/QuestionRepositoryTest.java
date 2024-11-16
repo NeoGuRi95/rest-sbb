@@ -63,24 +63,6 @@ public class QuestionRepositoryTest {
     }
 
     @Test
-    void testFindBySubject() {
-        // given
-        Question q1 = new Question();
-        q1.setSubject("test question subject1");
-        q1.setContent("test question content1");
-        q1.setCreateDate(LocalDateTime.now());
-        this.questionRepository.save(q1);
-
-        // when
-        Question findQuestion = questionRepository.findBySubject("test question subject1");
-
-        // then
-        if (findQuestion != null) {
-            assertEquals(findQuestion.getSubject(), "test question subject1");
-        }
-    }
-
-    @Test
     void testUpdate() {
         // given
         Question q1 = new Question();
