@@ -34,7 +34,9 @@ public class QuestionController {
 
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity<Question> createQuestion(@Valid @RequestBody QuestionCreateRequestDto requestDto, BindingResult bindingResult) throws BadRequestException {
+    public ResponseEntity<Question> createQuestion(
+        @Valid @RequestBody QuestionCreateRequestDto requestDto, BindingResult bindingResult)
+        throws BadRequestException {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.toString());
         }
