@@ -4,11 +4,10 @@ import com.mysite.sbb.question.dto.request.QuestionCreateRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/question")
 @RequiredArgsConstructor
@@ -19,9 +18,10 @@ public class QuestionController {
 
     @GetMapping("/list")
     @ResponseBody
-    public ResponseEntity<List<Question>> getQuestionList() {
-        List<Question> questionList = this.questionService.getList();
-        return ResponseEntity.ok(questionList);
+    public ResponseEntity<Page<Question>> getQuestionList(
+        @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<Question> questionPage = this.questionService.getList(page);
+        return ResponseEntity.ok(questionPage);
     }
 
     @GetMapping("/detail/{id}")
