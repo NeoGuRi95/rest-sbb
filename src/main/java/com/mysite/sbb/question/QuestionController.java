@@ -1,6 +1,7 @@
 package com.mysite.sbb.question;
 
 import com.mysite.sbb.question.dto.request.QuestionCreateRequestDto;
+import com.mysite.sbb.question.dto.request.QuestionModifyRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -41,5 +42,21 @@ public class QuestionController {
         }
         Question question = this.questionService.create(requestDto);
         return ResponseEntity.ok(question);
+    }
+
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<Question> modifyQuestion(@PathVariable("id") Integer id,
+        @Valid @RequestBody QuestionModifyRequestDto requestDto, BindingResult bindingResult)
+        throws BadRequestException {
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult.toString());
+        }
+        Question question = this.questionService.modify(id, requestDto);
+        return ResponseEntity.ok(question);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteQuestion(@PathVariable("id") Integer id) {
+        this.questionService.delete(id);
     }
 }

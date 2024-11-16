@@ -1,6 +1,7 @@
 package com.mysite.sbb.answer;
 
 import com.mysite.sbb.answer.dto.request.AnswerCreateRequestDto;
+import com.mysite.sbb.answer.dto.request.AnswerModifyRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,16 @@ public class AnswerController {
             throw new BadRequestException(bindingResult.toString());
         }
         Answer answer = this.answerService.create(questionId, requestDto);
+        return ResponseEntity.ok(answer);
+    }
+
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<Answer> modifyAnswer(@PathVariable("id") Integer id, @Valid @RequestBody
+    AnswerModifyRequestDto requestDto, BindingResult bindingResult) throws BadRequestException {
+        if (bindingResult.hasErrors()) {
+            throw new BadRequestException(bindingResult.toString());
+        }
+        Answer answer = this.answerService.modify(id, requestDto);
         return ResponseEntity.ok(answer);
     }
 }

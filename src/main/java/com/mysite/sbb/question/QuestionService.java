@@ -2,6 +2,7 @@ package com.mysite.sbb.question;
 
 import com.mysite.sbb.common.exception.DataNotFoundException;
 import com.mysite.sbb.question.dto.request.QuestionCreateRequestDto;
+import com.mysite.sbb.question.dto.request.QuestionModifyRequestDto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,18 @@ public class QuestionService {
         q.setContent(requestDto.getContent());
         q.setCreateDate(LocalDateTime.now());
         return this.questionRepository.save(q);
+    }
+
+    public Question modify(Integer id, QuestionModifyRequestDto requestDto) {
+        Question question = this.get(id);
+        question.setSubject(requestDto.getSubject());
+        question.setContent(requestDto.getContent());
+        question.setModifyDate(LocalDateTime.now());
+        return this.questionRepository.save(question);
+    }
+
+    public void delete(Integer id) {
+        Question question = this.get(id);
+        this.questionRepository.delete(question);
     }
 }
