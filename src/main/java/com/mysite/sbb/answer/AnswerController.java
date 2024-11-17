@@ -2,6 +2,7 @@ package com.mysite.sbb.answer;
 
 import com.mysite.sbb.answer.dto.request.AnswerCreateRequestDto;
 import com.mysite.sbb.answer.dto.request.AnswerModifyRequestDto;
+import com.mysite.sbb.answer.dto.response.AnswerResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -22,23 +23,25 @@ public class AnswerController {
     private final AnswerService answerService;
 
     @PostMapping("/create/{questionId}")
-    public ResponseEntity<Answer> createAnswer(@PathVariable("questionId") Integer questionId,
+    public ResponseEntity<AnswerResponseDto> createAnswer(
+        @PathVariable("questionId") Integer questionId,
         @Valid @RequestBody AnswerCreateRequestDto requestDto, BindingResult bindingResult)
         throws BadRequestException {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.toString());
         }
-        Answer answer = this.answerService.create(questionId, requestDto);
-        return ResponseEntity.ok(answer);
+        AnswerResponseDto responseDto = this.answerService.create(questionId, requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/modify/{id}")
-    public ResponseEntity<Answer> modifyAnswer(@PathVariable("id") Integer id, @Valid @RequestBody
-    AnswerModifyRequestDto requestDto, BindingResult bindingResult) throws BadRequestException {
+    public ResponseEntity<AnswerResponseDto> modifyAnswer(@PathVariable("id") Integer id,
+        @Valid @RequestBody
+        AnswerModifyRequestDto requestDto, BindingResult bindingResult) throws BadRequestException {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.toString());
         }
-        Answer answer = this.answerService.modify(id, requestDto);
-        return ResponseEntity.ok(answer);
+        AnswerResponseDto responseDto = this.answerService.modify(id, requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 }

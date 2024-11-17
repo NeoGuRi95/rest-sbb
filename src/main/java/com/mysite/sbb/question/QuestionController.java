@@ -2,6 +2,7 @@ package com.mysite.sbb.question;
 
 import com.mysite.sbb.question.dto.request.QuestionCreateRequestDto;
 import com.mysite.sbb.question.dto.request.QuestionModifyRequestDto;
+import com.mysite.sbb.question.dto.response.QuestionResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -17,42 +18,42 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @GetMapping("/list")
-    @ResponseBody
-    public ResponseEntity<Page<Question>> getQuestionList(
-        @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<Question> questionPage = this.questionService.getList(page);
-        return ResponseEntity.ok(questionPage);
-    }
-
     @GetMapping("/detail/{id}")
     @ResponseBody
-    public ResponseEntity<Question> getQuestion(@PathVariable("id") Integer id) {
-        Question question = this.questionService.get(id);
-        return ResponseEntity.ok(question);
+    public ResponseEntity<QuestionResponseDto> getQuestion(@PathVariable("id") Integer id) {
+        QuestionResponseDto responseDto = this.questionService.getResponseDtoById(id);
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping("/list")
+    @ResponseBody
+    public ResponseEntity<Page<QuestionResponseDto>> getQuestionList(
+        @RequestParam(value = "page", defaultValue = "0") int page) {
+        Page<QuestionResponseDto> questionPage = this.questionService.getResponseDtoPage(page);
+        return ResponseEntity.ok(questionPage);
     }
 
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity<Question> createQuestion(
+    public ResponseEntity<QuestionResponseDto> createQuestion(
         @Valid @RequestBody QuestionCreateRequestDto requestDto, BindingResult bindingResult)
         throws BadRequestException {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.toString());
         }
-        Question question = this.questionService.create(requestDto);
-        return ResponseEntity.ok(question);
+        QuestionResponseDto responseDto = this.questionService.create(requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/modify/{id}")
-    public ResponseEntity<Question> modifyQuestion(@PathVariable("id") Integer id,
+    public ResponseEntity<QuestionResponseDto> modifyQuestion(@PathVariable("id") Integer id,
         @Valid @RequestBody QuestionModifyRequestDto requestDto, BindingResult bindingResult)
         throws BadRequestException {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.toString());
         }
-        Question question = this.questionService.modify(id, requestDto);
-        return ResponseEntity.ok(question);
+        QuestionResponseDto responseDto = this.questionService.modify(id, requestDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("/delete/{id}")

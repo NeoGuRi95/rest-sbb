@@ -2,6 +2,7 @@ package com.mysite.sbb.answer;
 
 import com.mysite.sbb.answer.dto.request.AnswerCreateRequestDto;
 import com.mysite.sbb.answer.dto.request.AnswerModifyRequestDto;
+import com.mysite.sbb.answer.dto.response.AnswerResponseDto;
 import com.mysite.sbb.common.exception.DataNotFoundException;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionService;
@@ -18,7 +19,7 @@ public class AnswerService {
     private final QuestionService questionService;
     private final AnswerRepository answerRepository;
 
-    public Answer get(Integer id) {
+    public Answer getEntityById(Integer id) {
         Optional<Answer> opAnswer = this.answerRepository.findById(id);
         if (opAnswer.isPresent()) {
             return opAnswer.get();
@@ -27,24 +28,26 @@ public class AnswerService {
         }
     }
 
-    public Answer create(Integer questionId, AnswerCreateRequestDto requestDto) {
-        Question question = questionService.get(questionId);
+    public AnswerResponseDto create(Integer questionId, AnswerCreateRequestDto requestDto) {
+        Question question = questionService.getEntityById(questionId);
         Answer answer = new Answer();
         answer.setContent(requestDto.getContent());
         answer.setCreateDate(LocalDateTime.now());
         answer.setQuestion(question);
-        return this.answerRepository.save(answer);
+        Answer savedAnswer = this.answerRepository.save(answer);
+        return new AnswerResponseDto(savedAnswer);
     }
 
-    public Answer modify(Integer id, AnswerModifyRequestDto requestDto) {
-        Answer answer = this.get(id);
+    public AnswerResponseDto modify(Integer id, AnswerModifyRequestDto requestDto) {
+        Answer answer = this.getEntityById(id);
         answer.setContent(requestDto.getContent());
         answer.setModifyDate(LocalDateTime.now());
-        return this.answerRepository.save(answer);
+        Answer modifiedAnswer = this.answerRepository.save(answer);
+        return new AnswerResponseDto(modifiedAnswer);
     }
 
     public void delete(Integer id) {
-        Answer answer = this.get(id);
+        Answer answer = this.getEntityById(id);
         this.answerRepository.delete(answer);
     }
 }
