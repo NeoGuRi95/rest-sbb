@@ -28,8 +28,9 @@ public class QuestionController {
     @GetMapping("/list")
     @ResponseBody
     public ResponseEntity<Page<QuestionResponseDto>> getQuestionList(
-        @RequestParam(value = "page", defaultValue = "0") int page) {
-        Page<QuestionResponseDto> questionPage = this.questionService.getResponseDtoPage(page);
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "kw", defaultValue = "") String kw) {
+        Page<QuestionResponseDto> questionPage = this.questionService.getResponseDtoPage(page, kw);
         return ResponseEntity.ok(questionPage);
     }
 
